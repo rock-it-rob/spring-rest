@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        final String path = String.format("%s/*", SecureController.PATH);
+        final String path = String.format("%s/**", SecureController.PATH);
         http
             // Turn security on for the secure controller only.
             .antMatcher(path)
