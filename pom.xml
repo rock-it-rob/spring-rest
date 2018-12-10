@@ -18,13 +18,36 @@
     <version>2.1.0.RELEASE</version>
   </parent>
 
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.targer>1.8</maven.compiler.targer>
+  </properties>
+
   <dependencies>
     <!--
     Spring Boot Starters
     -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jersey</artifactId>
+    </dependency>
+    <!--
+    Spring Boot devtools
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -33,6 +56,11 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <logging.level.rob.test>debug</logging.level.rob.test>
+          </systemPropertyVariables>
+        </configuration>
       </plugin>
     </plugins>
   </build>
