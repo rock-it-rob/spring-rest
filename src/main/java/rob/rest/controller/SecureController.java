@@ -39,6 +39,7 @@ public class SecureController
         return ResponseEntity.ok(map);
     }
 
+    @Logging
     @GetMapping(path = "/extra", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getExtra(HttpServletRequest request)
     {

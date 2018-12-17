@@ -19,27 +19,12 @@ public class SecureAspect
 {
     private static final Logger log = LoggerFactory.getLogger(SecureAspect.class);
 
-    public SecureAspect()
-    {
-        log.debug("Initializing aspect: " + getClass().getCanonicalName());
-    }
-
-    @Pointcut("within(rob.rest.controller.SecureController)")
-    private void secureControllerPointcut()
-    {
-    }
-
-    @Pointcut("@annotation(Logging)")
+    @Pointcut("within(rob.rest.controller.SecureController) && @annotation(Logging)")
     private void loggingPointcut()
     {
     }
 
-    @Pointcut("secureControllerPointcut() && loggingPointcut()")
-    private void logSecureControllerPointcut()
-    {
-    }
-
-    @Before("logSecureControllerPointcut()")
+    @Before("loggingPointcut()")
     public void logSecureControllerBefore()
     {
         log.info("Before secure controller.");
