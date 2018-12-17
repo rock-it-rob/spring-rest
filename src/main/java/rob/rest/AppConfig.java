@@ -2,6 +2,7 @@ package rob.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * AppConfig is the entry point for the application.
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Rob Benton
  */
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class AppConfig
 {
     public static void main(String[] args)

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import rob.rest.aspect.Logging;
 import rob.rest.service.ExtraService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ public class SecureController
     @Autowired
     private ExtraService extraService;
 
+    @Logging
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> get()
     {
