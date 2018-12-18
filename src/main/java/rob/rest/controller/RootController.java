@@ -1,5 +1,6 @@
 package rob.rest.controller;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,11 @@ public class RootController
     public static final String PATH = "/";
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> get()
+    public ResponseEntity<Map<String, Object>> get(HttpRequest httpRequest)
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("status", HttpStatus.OK);
-        map.put("uri", PATH);
+        map.put("uri", httpRequest.getURI());
         map.put("timestamp", new Date());
 
         return ResponseEntity.ok(map);
