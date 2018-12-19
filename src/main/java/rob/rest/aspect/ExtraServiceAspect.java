@@ -5,9 +5,12 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import rob.rest.AspectLoggingConfig;
 import rob.rest.service.ExtraService;
 
 /**
@@ -17,6 +20,8 @@ import rob.rest.service.ExtraService;
  * @author Rob Benton
  */
 @Aspect
+@Component
+@Profile(AspectLoggingConfig.PROFILE)
 public class ExtraServiceAspect
 {
     private static final Logger log = LoggerFactory.getLogger(ExtraServiceAspect.class);

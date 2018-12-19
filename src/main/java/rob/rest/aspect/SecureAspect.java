@@ -5,6 +5,9 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import rob.rest.AspectLoggingConfig;
 import rob.rest.controller.SecureController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author Rob Benton
  */
 @Aspect
+@Component
+@Profile(AspectLoggingConfig.PROFILE)
 public class SecureAspect
 {
     private static final Logger log = LoggerFactory.getLogger(SecureAspect.class);
