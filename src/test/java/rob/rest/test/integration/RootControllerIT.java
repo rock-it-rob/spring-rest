@@ -12,10 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import rob.rest.controller.RootController;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -52,14 +52,15 @@ public class RootControllerIT
                 MockMvcRequestBuilders.get(RootController.PATH)
                     .accept(MediaType.APPLICATION_JSON)
             )
+            .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn();
         assertNotNull(mvcResult);
         final String result = mvcResult.getResponse().getContentAsString();
         assertNotNull(result);
         assertNotEquals(0, result.length());
-        final Map<String, Object> map = objectMapper.readValue(result, RootControllerResponse.class);
-        assertNotNull(map);
-        assertNotEquals(0, map.size());
+        final RootControllerResponse response = objectMapper.readValue(result, RootControllerResponse.class);
+        assertNotNull(response);
+        assertNotEquals(0, response.size());
     }
 
     private static class RootControllerResponse extends HashMap<String, Object>
