@@ -49,6 +49,17 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-aop</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+    <!--
+    Junit
+    -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
     <!--
     Spring Boot devtools
     -->
@@ -61,14 +72,20 @@
 
   <build>
     <plugins>
+      <!--
+      Spring Boot Devtools
+      -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <logging.level.rob.test>debug</logging.level.rob.test>
-          </systemPropertyVariables>
-        </configuration>
+      </plugin>
+      <!--
+      Integration testing
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.20.1</version>
       </plugin>
     </plugins>
   </build>
