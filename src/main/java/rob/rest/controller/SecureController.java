@@ -23,6 +23,7 @@ import java.util.Map;
 public class SecureController
 {
     public static final String PATH = "/secure";
+    public static final String EXTRA_PATH = "extra";
 
     @Autowired
     private ExtraService extraService;
@@ -40,7 +41,7 @@ public class SecureController
     }
 
     @Logging
-    @GetMapping(path = "extra", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = EXTRA_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getExtra(HttpServletRequest request)
     {
         HashMap<String, Object> map = new HashMap<>();
