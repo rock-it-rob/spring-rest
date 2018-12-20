@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping(SecureController.PATH)
 public class SecureController
 {
-    public static final String PATH = "secure";
+    public static final String PATH = "/secure";
 
     @Autowired
     private ExtraService extraService;
