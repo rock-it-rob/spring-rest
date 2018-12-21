@@ -35,12 +35,22 @@ public class SecureAspect
     {
     }
 
+    @Pointcut("logPointcut() && !args(javax.servlet.http.HttpServletRequest)")
+    private void logWithoutRequest()
+    {
+    }
+
+    @Pointcut("logPointcut() && args(javax.servlet.http.HttpServletRequest) && args(httpServletRequest)")
+    private void logWithRequest(HttpServletRequest httpServletRequest)
+    {
+    }
+
     /**
      * Logs the executions of any methods in the {@link SecureController}
      * class that are annotated with {@link Logging} and do not have a
      * {@link HttpServletRequest} as their first parameter.
      */
-    @Before("logPointcut() && !args(javax.servlet.http.HttpServletRequest)")
+    @Before("logWithoutRequest()")
     public void logSecureController()
     {
         log.info("Logging without request object.");
@@ -53,7 +63,7 @@ public class SecureAspect
      *
      * @param httpServletRequest HttpServletRequest
      */
-    @Before("logPointcut() && args(javax.servlet.http.HttpServletRequest) && args(httpServletRequest)")
+    @Before("logWithRequest(httpServletRequest)")
     public void logSecureControllerRequest(HttpServletRequest httpServletRequest)
     {
         log.info("Servlet request: " + httpServletRequest.toString());
