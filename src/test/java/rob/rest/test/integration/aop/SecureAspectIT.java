@@ -1,4 +1,4 @@
-package rob.rest.test.integration;
+package rob.rest.test.integration.aop;
 
 import org.junit.Before;
 import org.junit.Test;
