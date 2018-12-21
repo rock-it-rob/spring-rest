@@ -6,10 +6,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import rob.rest.aspect.SecureAspect;
 import rob.rest.controller.SecureController;
@@ -18,7 +16,6 @@ import rob.rest.service.ExtraService;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 /**
  * SecureAspectIT tests the functionality of the {@link rob.rest.aspect.SecureAspect}
@@ -27,22 +24,14 @@ import static org.mockito.Mockito.*;
  * @author Rob Benton
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {SecureController.class, SecureAspectIT.SecureAspectTest.class})
+@EnableAspectJAutoProxy
 public class SecureAspectIT
 {
-    @Configuration
-    @Import({SecureController.class, SecureAspectTest.class})
-    @EnableAspectJAutoProxy
-    static class Config
-    {
-        @Bean
-        public ExtraService extraService()
-        {
-            return mock(ExtraService.class);
-        }
-    }
-
     private static boolean called = false;
+
+    @MockBean
+    private ExtraService extraService;
 
     @Mock
     private HttpServletRequest httpServletRequest;
