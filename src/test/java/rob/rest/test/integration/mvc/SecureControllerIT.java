@@ -1,22 +1,19 @@
-package rob.rest.test.integration;
+package rob.rest.test.integration.mvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import rob.rest.controller.SecureController;
+import rob.rest.service.ExtraService;
 
-import java.util.Base64;
 import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,28 +22,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.junit.Assert.*;
 
 /**
+ * SecureControllerIT tests the MVC endpoints for the {@link SecureController}
+ * controller. It does not include security testing since that is handled on
+ * the service layer.
+ *
  * @author Rob Benton
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@TestPropertySource(SecureControllerIT.TEST_PROPERTIES)
+@WebMvcTest(controllers = SecureController.class, excludeAutoConfiguration = MockMvcSecurityAutoConfiguration.class)
 public class SecureControllerIT
 {
-    static final String TEST_PROPERTIES = "classpath:credentials.properties";
-
     private static ObjectMapper objectMapper;
-
-    private String authorization;
-
-    @Value("${username}")
-    private String username;
-
-    @Value("${password}")
-    private String password;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private ExtraService extraService;
 
     @BeforeClass
     public static void beforeClass()
@@ -54,37 +46,15 @@ public class SecureControllerIT
         objectMapper = new ObjectMapper();
     }
 
-    @Before
-    public void before()
-    {
-        final String raw = String.format("%s:%s", username, password);
-        final Base64.Encoder encoder = Base64.getMimeEncoder();
-        authorization = String.format(
-            "Basic %s", encoder.encodeToString(raw.getBytes())
-        );
-    }
-
     /**
-     * Test that the secure endpoint is not accessible without credentials.
+     * Test the the secure endpoint returns the correct object type.
      */
     @Test
-    public void testUnauthenticated() throws Exception
-    {
-        mockMvc.perform(get(SecureController.PATH))
-            .andExpect(status().isUnauthorized());
-    }
-
-    /**
-     * Test the the secure endpoint is accessible with credentials.
-     */
-    @Test
-    public void testAuthenticated() throws Exception
+    public void testSecure() throws Exception
     {
         mockMvc
             .perform(
-                get(SecureController.PATH)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, authorization)
+                get(SecureController.PATH).accept(MediaType.APPLICATION_JSON)
             )
             .andExpect(status().isOk())
             .andDo(mvcResult -> {
@@ -98,32 +68,17 @@ public class SecureControllerIT
     }
 
     /**
-     * Test that the extra endpoint is not accessible without credentials.
+     * Test that the extra endpoint returns the appropriate type.
      */
     @Test
-    public void testUnauthenticatedExtra() throws Exception
-    {
-        final String path = String.format(
-            "%s/%s", SecureController.PATH, SecureController.EXTRA_PATH
-        );
-        mockMvc.perform(get(path))
-            .andExpect(status().isUnauthorized());
-    }
-
-    /**
-     * Test that the extra endpoint is accessible with credentials.
-     */
-    @Test
-    public void testAuthenticatedExtra() throws Exception
+    public void testExtra() throws Exception
     {
         final String path = String.format(
             "%s/%s", SecureController.PATH, SecureController.EXTRA_PATH
         );
         mockMvc
             .perform(
-                get(path)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, authorization)
+                get(path).accept(MediaType.APPLICATION_JSON)
             )
             .andExpect(status().isOk())
             .andDo(mvcResult -> {
@@ -137,6 +92,12 @@ public class SecureControllerIT
     }
 
 
+    /**
+     * SecureControllerResponse defines a concrete type for the return value
+     * from the {@link SecureController}. Jackson needs concrete types for
+     * deserialization and parameterized types, such as Map are not suitable
+     * for the {@link ObjectMapper#readValue(String, Class)} method.
+     */
     private static final class SecureControllerResponse extends HashMap<String, Object>
     {
     }
